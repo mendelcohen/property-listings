@@ -89,7 +89,7 @@ export default function Page() {
       //   },
       // }),
       body: JSON.stringify({
-        limit: 10,
+        limit: 3,
         offset: 0,
         postal_code: homeSearch,
         status: ["for_sale", "ready_to_build"],
@@ -111,7 +111,7 @@ export default function Page() {
       setTotal(result.data.home_search.count);
       //setTotal(result["data"]["home_search"]["count"]);
       const propertyListings = result.data.home_search.results;
-      console.log(propertyListings);
+      //console.log(propertyListings);
       const propertyListingsNew = await getSecondPhotos(propertyListings);
       setListings(propertyListingsNew);
       setCurrentZip(homeSearch);
