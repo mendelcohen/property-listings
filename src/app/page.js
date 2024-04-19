@@ -17,6 +17,7 @@ export default function Page() {
   const [listings, setListings] = useState([]);
   const [homeSearch, setHomeSearch] = useState("01108");
   const [currentZip, setCurrentZip] = useState("01108");
+  const [status, setStatus] = useState("");
   const router = useRouter();
   const hasWindow = typeof window !== "undefined";
 
@@ -63,16 +64,16 @@ export default function Page() {
   }, []);
 
   const getListings = async () => {
-    //const url = "https://realty-in-us.p.rapidapi.com/properties/v3/list";
-    const url = "https://realtor.p.rapidapi.com/properties/v3/list";
+    const url = "https://realty-in-us.p.rapidapi.com/properties/v3/list";
+    //const url = "https://realtor.p.rapidapi.com/properties/v3/list";
     //const url = "https://realtor-com4.p.rapidapi.com/properties/list";
     const options = {
       method: "POST",
       headers: {
         "content-type": "application/json",
         "X-RapidAPI-Key": process.env.NEXT_PUBLIC_API_KEY,
-        //"X-RapidAPI-Host": "realty-in-us.p.rapidapi.com",
-        "X-RapidAPI-Host": "realtor.p.rapidapi.com",
+        "X-RapidAPI-Host": "realty-in-us.p.rapidapi.com",
+        //"X-RapidAPI-Host": "realtor.p.rapidapi.com",
         // "X-RapidAPI-Host": "realtor-com4.p.rapidapi.com",
       },
       // body: JSON.stringify({
@@ -101,13 +102,17 @@ export default function Page() {
 
     try {
       const response = await fetch(url, options);
+      if (response.status === 429) {
+        setStatus(
+          "This app has reached the maximum quota for requests from Realtor API"
+        );
+      }
       const result = await response.json();
       setTotal(result.data.home_search.count);
       //setTotal(result["data"]["home_search"]["count"]);
       const propertyListings = result.data.home_search.results;
-      // console.log(propertyListings);
+      console.log(propertyListings);
       const propertyListingsNew = await getSecondPhotos(propertyListings);
-      // console.log(propertyListingsNew);
       setListings(propertyListingsNew);
       setCurrentZip(homeSearch);
       //setListings(result["data"]["home_search"]["properties"]);
@@ -156,12 +161,12 @@ export default function Page() {
   };
 
   const getSecondPhoto = async (propertyId) => {
-    const url = `https://realtor.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
+    const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
     const options = {
       method: "GET",
       headers: {
         "X-RapidAPI-Key": process.env.NEXT_PUBLIC_API_KEY,
-        "X-RapidAPI-Host": "realtor.p.rapidapi.com",
+        "X-RapidAPI-Host": "realty-in-us.p.rapidapi.com",
       },
     };
 
@@ -220,6 +225,12 @@ export default function Page() {
           {currentZip} real estate & homes for sale
         </h1>
       </div>
+
+      {status !== "" && (
+        <div className="mt-8 w-screen flex justify-center items-center">
+          <h1 className="text-2xl">{status}</h1>
+        </div>
+      )}
 
       {/* <div className="flex py-3 px-4 color-[#726a60]">
         <span className="mr-8 mb-[5px]">
