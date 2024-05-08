@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Cross2Icon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
-export default function Header({ getListings, homeSearch, setHomeSearch }) {
+export default function Header({
+  getListings,
+  listLimit,
+  offset,
+  homeSearch,
+  setHomeSearch,
+}) {
   console.log(homeSearch);
   function searchHomes(e) {
     setHomeSearch(
@@ -35,7 +41,7 @@ export default function Header({ getListings, homeSearch, setHomeSearch }) {
             homeSearch.length < 5 ? "opacity-[0.6]" : ""
           } border-0 rounded-full absolute right-1 bottom-1 z-1 justify-center items-center`}
           onClick={() => {
-            getListings();
+            getListings({ limit: listLimit, offset: offset });
           }}
         >
           <MagnifyingGlassIcon className="text-white h-7 w-7" />

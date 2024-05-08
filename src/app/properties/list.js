@@ -7,26 +7,22 @@ dayjs.extend(relativeTime);
 
 export default function PropertiesList({
   windowDimensions,
-  getListings,
   listings,
   setListings,
+  loading,
+  setLoading,
 }) {
-  const [originalLoad, setOriginalLoad] = useState(true);
-
   useEffect(() => {
-    getListings();
-  }, []);
-
-  useEffect(() => {
-    if (originalLoad && listings.length > 0) {
-      async function getSecondPhotos() {
-        const propertyListingsNew = await getPhotos(listings);
-        setListings(propertyListingsNew);
-        setOriginalLoad(false);
-      }
+    if (loading && listings.length > 0) {
       getSecondPhotos();
     }
   }, [listings]);
+
+  async function getSecondPhotos() {
+    const propertyListingsNew = await getPhotos(listings);
+    setListings(propertyListingsNew);
+    setLoading(false);
+  }
 
   const timeSegements = [
     "hour",
@@ -64,12 +60,14 @@ export default function PropertiesList({
   };
 
   const getPropertysPhotos = async (propertyId) => {
-    const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
+    //const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
+    const url = `https://realtor.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
     const options = {
       method: "GET",
       headers: {
         "X-RapidAPI-Key": process.env.NEXT_PUBLIC_API_KEY,
-        "X-RapidAPI-Host": "realty-in-us.p.rapidapi.com",
+        //"X-RapidAPI-Host": "realty-in-us.p.rapidapi.com",
+        "X-RapidAPI-Host": "realtor.p.rapidapi.com",
       },
     };
     try {
@@ -82,7 +80,7 @@ export default function PropertiesList({
   };
 
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-3 px-4">
+    <div className="mb-12 grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-3">
       {listings.length > 0 &&
         listings.map((listing) => {
           const {
