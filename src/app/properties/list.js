@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
@@ -9,20 +8,12 @@ export default function PropertiesList({
   windowDimensions,
   listings,
   setListings,
-  loading,
-  setLoading,
 }) {
-  useEffect(() => {
-    if (loading && listings.length > 0) {
-      getSecondPhotos();
-    }
-  }, [listings]);
-
-  async function getSecondPhotos() {
-    const propertyListingsNew = await getPhotos(listings);
-    setListings(propertyListingsNew);
-    setLoading(false);
-  }
+  // useEffect(() => {
+  //   if (loading && listings.length > 0) {
+  //     getSecondPhotos();
+  //   }
+  // }, [listings]);
 
   const timeSegements = [
     "hour",
@@ -44,40 +35,6 @@ export default function PropertiesList({
     }
     setListings([...propertyListingsNew]);
   }
-
-  const getPhotos = async (propertyListings) => {
-    let propertyListingsNew = [];
-    for (let i = 0; i < propertyListings.length; i++) {
-      const propertysPhotos = await getPropertysPhotos(
-        propertyListings[i].property_id
-      );
-      const secondPhoto =
-        propertysPhotos.data.home_search?.results[0]?.photos[1]?.href;
-      propertyListings[i].second_photo = secondPhoto;
-      propertyListingsNew.push(propertyListings[i]);
-    }
-    return propertyListingsNew;
-  };
-
-  const getPropertysPhotos = async (propertyId) => {
-    //const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
-    const url = `https://realtor.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
-    const options = {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": process.env.NEXT_PUBLIC_API_KEY,
-        //"X-RapidAPI-Host": "realty-in-us.p.rapidapi.com",
-        "X-RapidAPI-Host": "realtor.p.rapidapi.com",
-      },
-    };
-    try {
-      const response = await fetch(url, options);
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div className="mb-12 grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-3">

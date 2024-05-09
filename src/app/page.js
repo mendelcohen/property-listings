@@ -61,6 +61,7 @@ export default function Page() {
   }, []);
 
   const getListings = async ({ limit, offset }) => {
+    setLoading(true);
     console.log("retrieving listings");
     //const url = "https://realty-in-us.p.rapidapi.com/properties/v3/list";
     const url = "https://realtor.p.rapidapi.com/properties/v3/list";
@@ -109,13 +110,54 @@ export default function Page() {
       setTotal(result.data.home_search.total);
       //setTotal(result["data"]["home_search"]["count"]);
       const propertyListings = result.data.home_search.results;
-      setListings(propertyListings);
+      //setListings(propertyListings);
       setCurrentZip(homeSearch);
       //setListings(result["data"]["home_search"]["properties"]);
+      getSecondPhotos(propertyListings);
     } catch (error) {
       console.error(error);
     }
     // console.log(listings);
+  };
+
+  async function getSecondPhotos(propertyListings) {
+    const propertyListingsNew = await getPhotos(propertyListings);
+    setListings(propertyListingsNew);
+    setLoading(false);
+  }
+
+  const getPhotos = async (propertyListings) => {
+    let propertyListingsNew = [];
+    for (let i = 0; i < propertyListings.length; i++) {
+      const propertysPhotos = await getPropertysPhotos(
+        propertyListings[i].property_id
+      );
+      const secondPhoto =
+        propertysPhotos.data.home_search?.results[0]?.photos[1]?.href;
+      propertyListings[i].second_photo = secondPhoto;
+      propertyListingsNew.push(propertyListings[i]);
+    }
+    return propertyListingsNew;
+  };
+
+  const getPropertysPhotos = async (propertyId) => {
+    //const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
+    const url = `https://realtor.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyId}`;
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": process.env.NEXT_PUBLIC_API_KEY,
+        //"X-RapidAPI-Host": "realty-in-us.p.rapidapi.com",
+        "X-RapidAPI-Host": "realtor.p.rapidapi.com",
+      },
+    };
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const sortListings = (sortByProp) => {
@@ -132,25 +174,26 @@ export default function Page() {
         offset={offset}
         getListings={getListings}
       />
-      <div className="p-4">
-        <HeaderData total={total} currentZip={currentZip} status={status} />
-        <PropertiesList
-          loading={loading}
-          setLoading={setLoading}
-          windowDimensions={windowDimensions}
-          getListings={getListings}
-          listings={listings}
-          setListings={setListings}
-        />
-        <Pagination
-          setLoading={setLoading}
-          listLimit={listLimit}
-          total={total}
-          offset={offset}
-          setOffset={setOffset}
-          getListings={getListings}
-        />
-      </div>
+      {loading ? (
+        <div>loading...</div>
+      ) : (
+        <div className="p-4">
+          <HeaderData total={total} currentZip={currentZip} status={status} />
+          <PropertiesList
+            windowDimensions={windowDimensions}
+            getListings={getListings}
+            listings={listings}
+            setListings={setListings}
+          />
+          <Pagination
+            listLimit={listLimit}
+            total={total}
+            offset={offset}
+            setOffset={setOffset}
+            getListings={getListings}
+          />
+        </div>
+      )}
     </div>
   );
 }

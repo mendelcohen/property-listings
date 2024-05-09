@@ -21,7 +21,7 @@ export default function HeaderData({ total, currentZip, status }) {
           </div>
         </span>
 
-        <div className="relative">
+        {/* <div className="relative">
           <div className="flex text-base min-h-5 p-0 absolute w-48">
             <label className="mr-1 color-[#1A1816] min-w-fit">Sort by</label>
             <select className="cursor-pointer inline-block truncate appearance-none color-[#1A1816] bg-white grow text-base font-normal leading-[1.4rem] padding-y-0 min-w-fit shadow-[rgb(114, 106, 96) 0px 0px 0px 1px inset] border-0 rounded-2">
@@ -78,7 +78,7 @@ export default function HeaderData({ total, currentZip, status }) {
               </svg>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

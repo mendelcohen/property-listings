@@ -3,7 +3,6 @@ export default function Pagination({
   total,
   offset,
   setOffset,
-  setLoading,
   getListings,
 }) {
   const pages = Math.ceil(total / listLimit);
@@ -15,10 +14,8 @@ export default function Pagination({
   console.log(pageNumbers);
 
   const changeListings = ({ limit, offset }) => {
-    setLoading(true);
     getListings({ limit, offset });
     setOffset(offset);
-    setLoading(true);
   };
 
   return (
@@ -33,7 +30,7 @@ export default function Pagination({
         }}
       >
         <svg
-          class="w-2.5 h-2.5 rtl:rotate-180"
+          className="w-2.5 h-2.5 rtl:rotate-180"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -75,7 +72,7 @@ export default function Pagination({
         }}
       >
         <svg
-          class="w-2.5 h-2.5 rtl:rotate-180"
+          className="w-2.5 h-2.5 rtl:rotate-180"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
