@@ -62,19 +62,18 @@ export default function PropertiesList({
             : "";
           const photo = primary_photo?.href;
           const image = photo
-            ? `${photo?.substring(
-                0,
+            ? `${photo?.slice(0, photo?.length - 4)}-w480_h360_x2${photo?.slice(
                 photo?.length - 4
-              )}-w480_h360_x2${photo?.substring(photo?.length - 4)}`
-            : "https://static.rdc.moveaws.com/images/common/photos-coming-soon.svg";
-          const secondImage = second_photo
-            ? `${second_photo?.substring(
-                0,
-                second_photo?.length - 4
-              )}-w480_h360_x2${second_photo?.substring(
-                second_photo?.length - 4
               )}`
-            : image;
+            : "https://static.rdc.moveaws.com/images/common/photos-coming-soon.svg";
+          // const secondImage = second_photo
+          //   ? `${second_photo?.substring(
+          //       0,
+          //       second_photo?.length - 4
+          //     )}-w480_h360_x2${second_photo?.substring(
+          //       second_photo?.length - 4
+          //     )}`
+          //   : image;
           const { beds, baths, sqft, lot_sqft, type } = description;
           const { line, city, state_code, postal_code } = location.address;
           const { imageWidth, imageHeight } = windowDimensions;
@@ -98,13 +97,14 @@ export default function PropertiesList({
                     height="0"
                     sizes="100vw"
                     priority
-                    className="rounded-t-2xl hover:opacity-0"
+                    className="rounded-t-2xl"
+                    //className="rounded-t-2xl hover:opacity-0"
                     style={{
                       width: `${imageWidth}px`,
                       height: `${imageHeight}px`,
                     }}
                   />
-                  <Image
+                  {/* <Image
                     src={secondImage}
                     alt="House image"
                     width="0"
@@ -116,7 +116,7 @@ export default function PropertiesList({
                       width: `${imageWidth}px`,
                       height: `${imageHeight}px`,
                     }}
-                  />
+                  /> */}
                   <div className="flex flex-wrap gap-1 absolute top-0 left-0 ml-4 my-3">
                     {is_new_listing && (
                       <div className="py-1 px-2 h-6 text-xs text-white font-medium min-w-6 bg-blue-600 rounded-[40px]">
