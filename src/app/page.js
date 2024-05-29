@@ -9,7 +9,7 @@ import propertyListings from "./mockData";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
-  const [total, setTotal] = useState(23);
+  const [total, setTotal] = useState(0);
   const [listLimit, setListLimit] = useState(3);
   const [offset, setOffset] = useState(0);
   const [homeSearch, setHomeSearch] = useState("01108");
@@ -61,7 +61,6 @@ export default function Page() {
   }, []);
 
   const getListings = async ({ limit, offset }) => {
-    setLoading(true);
     console.log("retrieving listings");
     //const url = "https://realty-in-us.p.rapidapi.com/properties/v3/list";
     const url = "https://realtor.p.rapidapi.com/properties/v3/list";
@@ -88,7 +87,7 @@ export default function Page() {
       //   },
       // }),
       body: JSON.stringify({
-        limit: limit,
+        //limit: limit,
         offset: offset,
         postal_code: homeSearch,
         status: ["for_sale", "ready_to_build"],
@@ -176,7 +175,7 @@ export default function Page() {
         getListings={getListings}
       />
       {loading ? (
-        <div>loading...</div>
+        <div className="m-4">loading...</div>
       ) : (
         <div className="p-4">
           <HeaderData total={total} currentZip={currentZip} status={status} />
@@ -186,13 +185,13 @@ export default function Page() {
             listings={listings}
             setListings={setListings}
           />
-          <Pagination
+          {/* <Pagination
             listLimit={listLimit}
             total={total}
             offset={offset}
             setOffset={setOffset}
             getListings={getListings}
-          />
+          /> */}
         </div>
       )}
     </div>

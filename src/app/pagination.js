@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 export default function Pagination({
   listLimit,
   total,
@@ -5,17 +7,30 @@ export default function Pagination({
   setOffset,
   getListings,
 }) {
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState([]);
   const pages = Math.ceil(total / listLimit);
-  const pageNumbers = [];
-  for (let i = 0; i < pages; i++) {
-    console.log(i);
-    pageNumbers.push(i + 1);
-  }
-  console.log(pageNumbers);
+  console.log(pages);
 
-  const changeListings = ({ limit, offset }) => {
+  useEffect(() => {
+    const numbers = [];
+    for (let i = 0; i < pages; i++) {
+      numbers.push(i + 1);
+    }
+    setPageNumbers(numbers);
+  }, [currentPageNumber]);
+  console.log(pageNumbers);
+  console.log(currentPageNumber);
+  const changeListings = ({ limit, offset, page }) => {
     getListings({ limit, offset });
     setOffset(offset);
+    setCurrentPageNumber(
+      typeof page === "number"
+        ? page
+        : page === "add page"
+        ? currentPageNumber + 1
+        : currentPageNumber - 1
+    );
   };
 
   return (
@@ -26,6 +41,7 @@ export default function Pagination({
           changeListings({
             limit: listLimit,
             offset: offset - 3,
+            page: "subtract page",
           });
         }}
       >
@@ -50,11 +66,14 @@ export default function Pagination({
           return (
             <button
               key={pageNumber}
-              className="mx-1 w-8 h-10 leading-tight text-gray-500 bg-white border-2 border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className={`mx-1 w-8 h-10 leading-tight text-gray-500 bg-white border-2 border-gray-300 ${
+                currentPageNumber === pageNumber ? "bg-gray-200" : ""
+              } hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               onClick={() => {
                 changeListings({
                   limit: listLimit,
                   offset: pageNumber * listLimit - 3,
+                  page: pageNumber,
                 });
               }}
             >
@@ -68,6 +87,7 @@ export default function Pagination({
           changeListings({
             limit: listLimit,
             offset: offset + 3,
+            page: "add page",
           });
         }}
       >
