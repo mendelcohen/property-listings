@@ -141,7 +141,7 @@ export default function PropertiesList({
                 </div>
                 <div
                   className="px-4 py-3 shadow-md rounded-b-2xl"
-                  style={{ maxWidth: "358px" }}
+                  style={{ maxWidth: `${imageWidth}px` }}
                 >
                   <div className="text-sm mb-1">
                     {is_contingent ? (
