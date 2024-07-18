@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/page.js"
-  ],
+, "src/app/header.js", "src/app/property-detail/page.tsx"  ],
   "exclude": ["node_modules"]
 }

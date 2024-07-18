@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
@@ -14,6 +16,7 @@ export default function PropertiesList({
   //     getSecondPhotos();
   //   }
   // }, [listings]);
+  const router = useRouter();
 
   const timeSegements = [
     "hour",
@@ -24,7 +27,7 @@ export default function PropertiesList({
     "seconds",
   ];
 
-  function selectProperty(property_id) {
+  function selectProperty(property_id, listing) {
     const propertyListingsNew = listings;
     for (let i = 0; i < propertyListingsNew.length; i++) {
       if (propertyListingsNew[i].property_id === property_id) {
@@ -34,10 +37,13 @@ export default function PropertiesList({
       }
     }
     setListings([...propertyListingsNew]);
+    const proplisting = JSON.stringify(listing);
+    localStorage.setItem("listing", proplisting);
+    router.push("../property-detail");
   }
 
   return (
-    <div className="mb-12 grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-3">
+    <div className="mb-12 md:grid md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-3">
       {listings.length > 0 &&
         listings.map((listing) => {
           const {
@@ -61,11 +67,13 @@ export default function PropertiesList({
               )
             : "";
           const photo = primary_photo?.href;
-          const image = photo
-            ? `${photo?.slice(0, photo?.length - 4)}-w480_h360_x2${photo?.slice(
-                photo?.length - 4
-              )}`
-            : "https://static.rdc.moveaws.com/images/common/photos-coming-soon.svg";
+          let image;
+          if (photo) {
+            image = `${photo?.slice(
+              0,
+              photo?.length - 4
+            )}-w480_h360_x2${photo?.slice(photo?.length - 4)}`;
+          }
           // const secondImage = second_photo
           //   ? `${second_photo?.substring(
           //       0,
@@ -79,17 +87,29 @@ export default function PropertiesList({
           const { imageWidth, imageHeight } = windowDimensions;
 
           return (
-            <div key={property_id}>
+            <div key={property_id} className="">
               <div className="leading-[18px] text-grey-600 text-xs truncate">
                 Brokered by {branding[0].name}
               </div>
+              {/* <Link
+                href={{
+                  pathname: "/property-detail",
+                  query: {
+                    id: `${listing.property_id}`,
+                    address: line,
+                    city: city,
+                    state: state_code,
+                    zip: postal_code,
+                  },
+                }}
+              > */}
               <div
-                onClick={() => selectProperty(property_id)}
+                onClick={() => selectProperty(property_id, listing)}
                 className={`shadow-sm rounded-2xl ${
                   listing.selected ? `ring-2 ring-blue-600` : ``
                 }`}
               >
-                <div className="relative">
+                <div className="relative rounded-t-2xl bg-[url('https://static.rdc.moveaws.com/images/common/photos-coming-soon.svg')]">
                   <Image
                     src={image}
                     alt="House image"
@@ -105,18 +125,18 @@ export default function PropertiesList({
                     }}
                   />
                   {/* <Image
-                    src={secondImage}
-                    alt="House image"
-                    width="0"
-                    height="0"
-                    sizes="100vw"
-                    priority
-                    className="rounded-t-2xl absolute top-0 opacity-0 hover:opacity-100 duration-1000"
-                    style={{
-                      width: `${imageWidth}px`,
-                      height: `${imageHeight}px`,
-                    }}
-                  /> */}
+                      src={secondImage}
+                      alt="House image"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
+                      priority
+                      className="rounded-t-2xl absolute top-0 opacity-0 hover:opacity-100 duration-1000"
+                      style={{
+                        width: `${imageWidth}px`,
+                        height: `${imageHeight}px`,
+                      }}
+                    /> */}
                   <div className="flex flex-wrap gap-1 absolute top-0 left-0 ml-4 my-3">
                     {is_new_listing && (
                       <div className="py-1 px-2 h-6 text-xs text-white font-medium min-w-6 bg-blue-600 rounded-[40px]">
@@ -254,6 +274,7 @@ export default function PropertiesList({
                   </div>
                 </div>
               </div>
+              {/* </Link> */}
             </div>
           );
         })}

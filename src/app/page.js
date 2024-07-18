@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "./header";
 import HeaderData from "./headerData";
-import PropertiesList from "./properties/list";
+import PropertiesList from "./properties/listings";
 import Pagination from "./pagination";
 import propertyListings from "./mockData";
 
