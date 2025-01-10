@@ -197,7 +197,7 @@ export default function Page() {
           </p>
         </div>
       )}
-      {loading && <div className="m-4 absolute-0">loading...</div>}
+      {loading && !popup && <div className="m-4 absolute-0">loading...</div>}
       <Header
         homeSearch={homeSearch}
         setHomeSearch={setHomeSearch}
