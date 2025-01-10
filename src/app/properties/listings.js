@@ -11,6 +11,7 @@ export default function PropertiesList({
   listings,
   setListings,
 }) {
+  // This feature which includes the commented out code below is noce to have and mimmicks the behavior of the realtor.com website where the second photo is shown on hover. However, it requires another API call for each photo and would quickly exhaust the API limit. It is commented out for now.
   // useEffect(() => {
   //   if (loading && listings.length > 0) {
   //     getSecondPhotos();
@@ -68,6 +69,7 @@ export default function PropertiesList({
             : "";
           const photo = primary_photo?.href;
           let image;
+          // Solution for expanding the photo while loading. Slows down the site.
           if (photo) {
             image = `${photo?.slice(
               0,

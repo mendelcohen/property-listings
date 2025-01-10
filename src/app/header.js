@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Cross2Icon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 export default function Header({
@@ -9,6 +9,14 @@ export default function Header({
   setHomeSearch,
 }) {
   console.log(homeSearch);
+  const [popup, setPopup] = useState(true);
+  useEffect(() => {
+    const timed = setTimeout(() => {
+      setPopup(false);
+    }, 5000);
+    return () => clearTimeout(timed);
+  }, []);
+
   function searchHomes(e) {
     setHomeSearch(
       homeSearch.length < 5 ? e.target.value : e.target.value.slice(0, 5)
@@ -18,9 +26,9 @@ export default function Header({
   return (
     <header className="sticky top-0 h-20 p-4 shadow bg-white z-[11]">
       <div className="relative max-w-[198px]">
-        <div className=" ">
+        <div className="relative flex items-center">
           <input
-            className="flex h-12 w-[198px] pl-5 pr-14 border-black border-[1px] rounded-[36px] relative"
+            className="h-12 w-[198px] pl-5 pr-14 border-black border-[1px] rounded-[36px]"
             placeholder="Enter a zipcode"
             // placeholder="Address, City, ZIP or Neighborhood"
             onChange={(e) => searchHomes(e)}
@@ -28,10 +36,10 @@ export default function Header({
           />
           {homeSearch?.length > 0 && (
             <button
-              className="absolute right-12 bottom-1 w-[42px] h-10 px-[9px] pb-[3px]"
+              className="absolute right-12 w-[42px] h-10 px-[9px]"
               onClick={() => setHomeSearch("")}
             >
-              <Cross2Icon className="w-6 h-6" />
+              <Cross2Icon className="w-6 h-6 opacity-[0.6] hover:opacity-[1]" />
             </button>
           )}
         </div>
@@ -47,6 +55,26 @@ export default function Header({
           <MagnifyingGlassIcon className="text-white h-7 w-7" />
         </button>
       </div>
+      {popup && (
+        <div
+          class="absolute top-0 left-0 bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
+          role="alert"
+        >
+          <button
+            className="absolute top-2 right-2 w-6 h-6"
+            onClick={() => setPopup(false)}
+          >
+            <Cross2Icon className="w-4 h-4 mx-auto" />
+          </button>
+          <p class="font-bold">Thank you for visiting!</p>
+          <p class="text-sm">
+            Please be patient as the site loads. This portfolio project uses a
+            free API that provides limited image sizes. To enhance the display
+            quality, a solution is in place to resize the images without
+            blurring, but it may impact load times.
+          </p>
+        </div>
+      )}
     </header>
   );
 }
