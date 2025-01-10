@@ -6,6 +6,7 @@ import HeaderData from "./headerData";
 import PropertiesList from "./properties/listings";
 import Pagination from "./pagination";
 import propertyListings from "./mockData";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
@@ -16,8 +17,16 @@ export default function Page() {
   const [currentZip, setCurrentZip] = useState("01108");
   const [listings, setListings] = useState([]);
   const [status, setStatus] = useState("");
+  const [popup, setPopup] = useState(true);
   const router = useRouter();
   const hasWindow = typeof window !== "undefined";
+
+  useEffect(() => {
+    const timed = setTimeout(() => {
+      setPopup(false);
+    }, 5000);
+    return () => clearTimeout(timed);
+  }, []);
 
   function getWindowDimensions() {
     const width = hasWindow ? window.innerWidth : null;
@@ -167,6 +176,27 @@ export default function Page() {
   return (
     <div className="relative">
       {/* <button onClick={() => router.push("../test")}>click</button> */}
+      {popup && (
+        <div
+          className="z-[20] flex flex-col justify-center absolute top-0 left-0 w-full bg-blue-100 border border-blue-500 text-blue-700 px-4 py-3"
+          role="alert"
+        >
+          <button
+            className="absolute top-0 right-0 w-6 h-6"
+            onClick={() => setPopup(false)}
+          >
+            <Cross2Icon className="w-4 h-4 mx-auto" />
+          </button>
+          <p class="font-bold">
+            Thank you for visiting! Please be patient as the site loads.
+          </p>
+          <p class="text-sm">
+            This portfolio project uses a free API that provides limited image
+            sizes. To enhance the display quality, a solution is in place to
+            resize the images without blurring, but it may impact load times.
+          </p>
+        </div>
+      )}
       <Header
         homeSearch={homeSearch}
         setHomeSearch={setHomeSearch}

@@ -8,15 +8,6 @@ export default function Header({
   homeSearch,
   setHomeSearch,
 }) {
-  console.log(homeSearch);
-  const [popup, setPopup] = useState(true);
-  useEffect(() => {
-    const timed = setTimeout(() => {
-      setPopup(false);
-    }, 5000);
-    return () => clearTimeout(timed);
-  }, []);
-
   function searchHomes(e) {
     setHomeSearch(
       homeSearch.length < 5 ? e.target.value : e.target.value.slice(0, 5)
@@ -55,26 +46,6 @@ export default function Header({
           <MagnifyingGlassIcon className="text-white h-7 w-7" />
         </button>
       </div>
-      {popup && (
-        <div
-          class="absolute top-0 left-0 bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
-          role="alert"
-        >
-          <button
-            className="absolute top-2 right-2 w-6 h-6"
-            onClick={() => setPopup(false)}
-          >
-            <Cross2Icon className="w-4 h-4 mx-auto" />
-          </button>
-          <p class="font-bold">Thank you for visiting!</p>
-          <p class="text-sm">
-            Please be patient as the site loads. This portfolio project uses a
-            free API that provides limited image sizes. To enhance the display
-            quality, a solution is in place to resize the images without
-            blurring, but it may impact load times.
-          </p>
-        </div>
-      )}
     </header>
   );
 }
