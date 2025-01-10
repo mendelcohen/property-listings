@@ -207,7 +207,7 @@ export default function Page() {
             offset={offset}
             getListings={getListings}
           />
-          <div className={`${popup ? "absolute top-0" : ""} p-4`}>
+          <div className="p-4">
             <HeaderData total={total} currentZip={currentZip} status={status} />
             <PropertiesList
               windowDimensions={windowDimensions}
