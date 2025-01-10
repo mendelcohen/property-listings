@@ -176,7 +176,7 @@ export default function Page() {
   return (
     <div className="relative">
       {/* <button onClick={() => router.push("../test")}>click</button> */}
-      {popup && (
+      {popup && loading ? (
         <div
           className="z-[20] flex flex-col justify-center relative absolute top-0 left-0 w-full bg-blue-100 border border-blue-500 text-blue-700 px-4 py-3"
           role="alert"
@@ -196,31 +196,33 @@ export default function Page() {
             resize the images without blurring, but it may impact load times.
           </p>
         </div>
-      )}
-      {loading && !popup && <div className="m-4 absolute-0">loading...</div>}
-      <Header
-        homeSearch={homeSearch}
-        setHomeSearch={setHomeSearch}
-        listLimit={listLimit}
-        offset={offset}
-        getListings={getListings}
-      />
-      {!loading && (
-        <div className={`${popup ? "absolute top-0" : ""} p-4`}>
-          <HeaderData total={total} currentZip={currentZip} status={status} />
-          <PropertiesList
-            windowDimensions={windowDimensions}
+      ) : loading ? (
+        <div className="m-4 absolute-0">loading...</div>
+      ) : (
+        <div>
+          <Header
+            homeSearch={homeSearch}
+            setHomeSearch={setHomeSearch}
+            listLimit={listLimit}
+            offset={offset}
             getListings={getListings}
-            listings={listings}
-            setListings={setListings}
           />
-          {/* <Pagination
+          <div className={`${popup ? "absolute top-0" : ""} p-4`}>
+            <HeaderData total={total} currentZip={currentZip} status={status} />
+            <PropertiesList
+              windowDimensions={windowDimensions}
+              getListings={getListings}
+              listings={listings}
+              setListings={setListings}
+            />
+            {/* <Pagination
             listLimit={listLimit}
             total={total}
             offset={offset}
             setOffset={setOffset}
             getListings={getListings}
           /> */}
+          </div>
         </div>
       )}
     </div>
