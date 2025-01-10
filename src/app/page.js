@@ -178,7 +178,7 @@ export default function Page() {
       {/* <button onClick={() => router.push("../test")}>click</button> */}
       {popup && (
         <div
-          className="z-[20] flex flex-col justify-center absolute top-0 left-0 w-full bg-blue-100 border border-blue-500 text-blue-700 px-4 py-3"
+          className="z-[20] flex flex-col justify-center relative absolute top-0 left-0 w-full bg-blue-100 border border-blue-500 text-blue-700 px-4 py-3"
           role="alert"
         >
           <button
@@ -197,6 +197,7 @@ export default function Page() {
           </p>
         </div>
       )}
+      {loading && <div className="m-4 absolute-0">loading...</div>}
       <Header
         homeSearch={homeSearch}
         setHomeSearch={setHomeSearch}
@@ -204,10 +205,8 @@ export default function Page() {
         offset={offset}
         getListings={getListings}
       />
-      {loading ? (
-        <div className="m-4">loading...</div>
-      ) : (
-        <div className="p-4">
+      {!loading && (
+        <div className={`${popup ? "absolute top-0" : ""} p-4`}>
           <HeaderData total={total} currentZip={currentZip} status={status} />
           <PropertiesList
             windowDimensions={windowDimensions}
